@@ -59,7 +59,12 @@ def download_model_from_hf(model_path):
     model_dir = Path(model_path).parent
     model_dir.mkdir(parents=True, exist_ok=True)
     
-    st.info("🤗 Downloading model from Hugging Face (first time only, ~57MB)...")
+    # Create placeholders that we can clear
+    info_placeholder = st.empty()
+    progress_placeholder = st.empty()
+    status_placeholder = st.empty()
+    
+    info_placeholder.info("🤗 Downloading model from Hugging Face (first time only, ~57MB)...")
     
     try:
         response = requests.get(HF_MODEL_URL, stream=True)
@@ -72,8 +77,9 @@ def download_model_from_hf(model_path):
                 f.write(response.content)
             else:
                 downloaded = 0
-                progress_bar = st.progress(0)
-                status_text = st.empty()
+                
+                with progress_placeholder:
+                    progress_bar = st.progress(0)
                 
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
@@ -81,15 +87,19 @@ def download_model_from_hf(model_path):
                         downloaded += len(chunk)
                         progress = int((downloaded / total_size) * 100)
                         progress_bar.progress(progress / 100)
-                        status_text.text(f"Downloading: {downloaded / (1024*1024):.1f}MB / {total_size / (1024*1024):.1f}MB")
-                
-                progress_bar.empty()
-                status_text.empty()
+                        status_placeholder.text(f"Downloading: {downloaded / (1024*1024):.1f}MB / {total_size / (1024*1024):.1f}MB")
         
-        st.success("✅ Model downloaded successfully!")
+        # Clear all download messages
+        info_placeholder.empty()
+        progress_placeholder.empty()
+        status_placeholder.empty()
+        
         return True
         
     except Exception as e:
+        info_placeholder.empty()
+        progress_placeholder.empty()
+        status_placeholder.empty()
         st.error(f"❌ Error downloading model: {str(e)}")
         if os.path.exists(model_path):
             os.remove(model_path)
@@ -109,9 +119,8 @@ def load_model(device='cpu'):
     """
     model_path = MODEL_CONFIG['model_path']
     
-    # Check if model exists, download if not
+    # Check if model exists, download if not (silently)
     if not os.path.exists(model_path):
-        st.warning(f"⚠️ Model not found at {model_path}")
         success = download_model_from_hf(model_path)
         if not success:
             raise FileNotFoundError(f"Failed to download model from Hugging Face")
