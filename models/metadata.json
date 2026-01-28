@@ -1,0 +1,32 @@
+{
+  "instrument_cols": [
+    "accordion",
+    "banjo",
+    "bass",
+    "cello",
+    "clarinet",
+    "cymbals",
+    "drums",
+    "flute",
+    "guitar",
+    "mallet_percussion",
+    "mandolin",
+    "organ",
+    "piano",
+    "saxophone",
+    "synthesizer",
+    "trombone",
+    "trumpet",
+    "ukulele",
+    "violin",
+    "voice"
+  ],
+  "n_classes": 20,
+  "config": {
+    "sr": 22050,
+    "duration": 10.0,
+    "n_mels": 128,
+    "n_fft": 2048,
+    "hop_length": 512
+  }
+}

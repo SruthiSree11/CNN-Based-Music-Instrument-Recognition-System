@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Temporary files
+temp/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local user data (keep users.json for demo)
+# users.json  # Uncomment to exclude in production
+
+# Model checkpoints (too large for Git)
+# models/*.pt  # Uncomment if model is too large
+
+# Logs
+*.logmodels/model.pt 
+models/model.pt 
